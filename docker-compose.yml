@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: srm-financial-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: srm-financial
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - srm-network
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: srm-financial-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/srm-financial
+      NODE_ENV: production
+      PORT: 5000
+      JWT_SECRET: your_jwt_secret_here
+      ALPHA_VANTAGE_API_KEY: your_alpha_vantage_api_key
+      YAHOO_FINANCE_API_KEY: your_yahoo_finance_api_key
+      CLIENT_URL: http://localhost:3000
+    depends_on:
+      - mongodb
+    networks:
+      - srm-network
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: srm-financial-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    environment:
+      REACT_APP_API_URL: http://localhost:5000/api
+    depends_on:
+      - backend
+    networks:
+      - srm-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  srm-network:
+    driver: bridge
