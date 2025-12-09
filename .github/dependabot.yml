@@ -1,0 +1,22 @@
+version: 2
+
+updates:
+  # Backend and root package.json (Node / Express / tools)
+  - package-ecosystem: "npm"
+    directory: "/"          # location of root package.json
+    schedule:
+      interval: "weekly"    # or "daily"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "dependabot"
+
+  # React client dependencies
+  - package-ecosystem: "npm"
+    directory: "/client"    # location of client/package.json
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "frontend"
