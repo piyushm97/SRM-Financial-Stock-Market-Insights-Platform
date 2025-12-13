@@ -1,0 +1,28 @@
+// utils/update-daily-summary.js
+const fs = require("fs");
+const path = require("path");
+
+const summaryPath = path.join(__dirname, "..", "data", "daily-summary.json");
+
+// baseline structure if file is empty
+let summary = {
+  lastUpdated: null,
+  notes: [],
+};
+
+if (fs.existsSync(summaryPath)) {
+  summary = JSON.parse(fs.readFileSync(summaryPath, "utf8"));
+}
+
+const now = new Date().toISOString();
+
+summary.lastUpdated = now;
+summary.notes.push({
+  at: now,
+  text: "Automated daily market summary placeholder.",
+});
+
+fs.mkdirSync(path.dirname(summaryPath), { recursive: true });
+fs.writeFileSync(summaryPath, JSON.stringify(summary, null, 2) + "\n");
+
+console.log("daily-summary.json updated.");
