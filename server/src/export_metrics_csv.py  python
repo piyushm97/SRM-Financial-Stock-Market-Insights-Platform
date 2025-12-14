@@ -1,0 +1,35 @@
+# server/src/export_metrics_csv.py
+# Consolidates several log files into a single CSV for later analysis.
+
+from pathlib import Path
+import csv
+
+ROOT = Path("server/src")
+OUT = ROOT / "metrics-export.csv"
+
+files = {
+    "price": ROOT / "daily-price.log",
+    "ma": ROOT / "daily-moving-average.log",
+    "vol": ROOT / "daily-volatility.log",
+}
+
+def read_last(path: Path):
+    if not path.exists():
+        return ""
+    return path.read_text(encoding="utf-8").strip().splitlines()[-1]
+
+def main():
+    rows = []
+    for label, path in files.items():
+        last = read_last(path)
+        rows.append({"metric": label, "last": last})
+
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    with OUT.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=["metric", "last"])
+        writer.writeheader()
+        writer.writerows(rows)
+    print("Wrote metrics-export.csv with", len(rows), "rows")
+
+if __name__ == "__main__":
+    main()
