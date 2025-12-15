@@ -1,0 +1,27 @@
+// scripts/build-dashboard-html.js
+const fs = require("fs");
+const path = require("path");
+
+const jsonPath = path.join(__dirname, "..", "client/src/generated/daily-dashboard.json");
+let data = {};
+if (fs.existsSync(jsonPath)) {
+  data = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
+}
+
+const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>SRM Daily Dashboard</title>
+</head>
+<body>
+  <h1>SRM Daily Snapshot</h1>
+  <pre>${JSON.stringify(data, null, 2)}</pre>
+</body>
+</html>
+`;
+
+const outPath = path.join(__dirname, "..", "client/public/srm-daily-dashboard.html");
+fs.mkdirSync(path.dirname(outPath), { recursive: true });
+fs.writeFileSync(outPath, html, "utf8");
+console.log("Updated srm-daily-dashboard.html");
