@@ -1,0 +1,10 @@
+// scripts/audit-run.js
+const fs = require("fs");
+const path = require("path");
+
+const outPath = path.join(__dirname, "..", "server", "src", "audit.log");
+const now = new Date().toISOString();
+
+const entry = `${now},job=analytics_batch,status=OK\n`;
+fs.appendFileSync(outPath, entry, "utf8");
+console.log("Appended audit entry:", entry.trim());
