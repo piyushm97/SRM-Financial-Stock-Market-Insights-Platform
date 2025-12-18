@@ -1,0 +1,23 @@
+from pathlib import Path
+import yaml
+from datetime import datetime
+
+CFG = Path("config/settings.yaml")
+OUT = Path("server/src/config_snapshot.log")
+
+def main():
+    if not CFG.exists():
+        print("settings.yaml missing.")
+        return
+
+    data = yaml.safe_load(CFG.read_text(encoding="utf-8"))
+    now = datetime.utcnow().isoformat()
+    line = f"{now},env={data.get('env')},ma_short={data['analytics']['ma_short']},ma_long={data['analytics']['ma_long']}\n"
+
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    with OUT.open("a", encoding="utf-8") as f:
+        f.write(line)
+    print("Appended config snapshot:", line.strip())
+
+if __name__ == "__main__":
+    main()
