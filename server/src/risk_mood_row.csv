@@ -1,0 +1,28 @@
+from pathlib import Path
+
+ROOT = Path("server/src")
+OUT = ROOT / "risk-mood-row.csv"
+
+def last_line(path: Path):
+    if not path.exists():
+        return ""
+    return path.read_text(encoding="utf-8").strip().splitlines()[-1]
+
+def main():
+    eq = last_line(ROOT / "equity-curve.log")
+    sharpe = last_line(ROOT / "sharpe-ratio.log")
+    mdd = last_line(ROOT / "max-drawdown.log")
+    mood = last_line(ROOT / "market-mood.log")
+
+    header = "equity_line,sharpe_line,mdd_line,mood_line\n"
+    row = f"\"{eq}\",\"{sharpe}\",\"{mdd}\",\"{mood}\"\n"
+
+    if not OUT.exists():
+        OUT.write_text(header + row, encoding="utf-8")
+    else:
+        with OUT.open("a", encoding="utf-8") as f:
+            f.write(row)
+    print("Appended risk-mood-row.csv")
+
+if __name__ == "__main__":
+    main()
