@@ -1,0 +1,17 @@
+{
+  "app": {
+    "title": "SRM Financial",
+    "subtitle": "Real-time stock market insights"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "portfolio": "Portfolio",
+    "orders": "Orders",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "totalValue": "Total portfolio value",
+    "dayChange": "Day change"
+  }
+}
