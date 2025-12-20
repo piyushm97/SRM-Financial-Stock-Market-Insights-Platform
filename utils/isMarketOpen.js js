@@ -1,0 +1,15 @@
+// utils/isMarketOpen.js
+export function isMarketOpen(date = new Date()) {
+  const d = new Date(date);
+  const day = d.getUTCDay(); // 0=Sun
+  if (day === 0 || day === 6) return false;
+
+  const hour = d.getUTCHours();
+  const minute = d.getUTCMinutes();
+  const time = hour * 60 + minute;
+
+  const open = 14 * 60;  // 09:00 EST ~ 14:00 UTC (approx)
+  const close = 21 * 60; // 16:00 EST ~ 21:00 UTC (approx)
+
+  return time >= open && time <= close;
+}
