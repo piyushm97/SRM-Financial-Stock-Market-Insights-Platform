@@ -1,0 +1,23 @@
+// client/src/components/SymbolSearch.jsx
+export default function SymbolSearch({ value, onChange, onSubmit }) {
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && onSubmit) onSubmit();
+  };
+
+  return (
+    <input
+      value={value}
+      onChange={(e) => onChange(e.target.value.toUpperCase())}
+      onKeyDown={handleKeyDown}
+      placeholder="Search symbol e.g. AAPL"
+      style={{
+        padding: "6px 10px",
+        borderRadius: 6,
+        border: "1px solid #4b5563",
+        background: "#020617",
+        color: "#e5e7eb",
+        fontSize: 13
+      }}
+    />
+  );
+}
