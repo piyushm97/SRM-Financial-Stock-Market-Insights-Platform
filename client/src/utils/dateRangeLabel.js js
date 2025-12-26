@@ -1,0 +1,9 @@
+// client/src/utils/dateRangeLabel.js
+export function dateRangeLabel(days) {
+  if (days === 1) return "1D";
+  if (days === 5) return "5D";
+  if (days === 30) return "1M";
+  if (days === 90) return "3M";
+  if (days === 365) return "1Y";
+  return `${days}D`;
+}
