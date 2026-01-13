@@ -1,0 +1,30 @@
+// scripts/csv-to-html-dashboard.js
+const fs = require("fs");
+const path = require("path");
+
+const csvPath = path.join(__dirname, "..", "server", "src", "dashboard-table.csv");
+const outPath = path.join(__dirname, "..", "server", "src", "dashboard-table.html");
+
+if (!fs.existsSync(csvPath)) {
+  fs.writeFileSync(outPath, "<p>No dashboard-table.csv yet.</p>\n", "utf8");
+  console.log("dashboard-table.csv missing.");
+  process.exit(0);
+}
+
+const lines = fs.readFileSync(csvPath, "utf8").trim().split("\n");
+const header = lines[0].split(",");
+const rows = lines.slice(1).map((l) => l.split(","));
+
+let html = "<table border='1'><thead><tr>";
+for (const h of header) html += `<th>${h}</th>`;
+html += "</tr></thead><tbody>";
+
+for (const row of rows) {
+  html += "<tr>";
+  for (const cell of row) html += `<td>${cell}</td>`;
+  html += "</tr>";
+}
+html += "</tbody></table>";
+
+fs.writeFileSync(outPath, html, "utf8");
+console.log("Updated dashboard-table.html");
